@@ -10,6 +10,7 @@ import logger from "./configs/logger.js";
 import userRouter from "./routes/userRoutes.js";
 import ownerRouter from "./routes/ownerRoutes.js";
 import bookingRouter from "./routes/bookingRoutes.js";
+import publicBookingRouter from "./routes/publicBookingRoutes.js";
 import { errorHandler, notFound } from "./middleware/errorHandler.js";
 
 // Initialize Express App
@@ -103,7 +104,8 @@ app.get('/', (req, res) => {
             health: '/health',
             users: '/api/user',
             owners: '/api/owner',
-            bookings: '/api/bookings'
+            bookings: '/api/bookings',
+            publicBookings: '/api/public-bookings'
         }
     });
 });
@@ -111,6 +113,7 @@ app.get('/', (req, res) => {
 app.use('/api/user', userRouter);
 app.use('/api/owner', ownerRouter);
 app.use('/api/bookings', bookingRouter);
+app.use('/api/public-bookings', publicBookingRouter);
 
 // Error handling middleware (must be last)
 app.use(notFound);

@@ -100,10 +100,7 @@ export const deleteCar = async (req, res) =>{
             return res.json({ success: false, message: "Unauthorized" });
         }
 
-        car.owner = null;
-        car.isAvailable = false;
-
-        await car.save()
+        await car.deleteOne();
 
         res.json({success: true, message: "Car Removed"})
     } catch (error) {
@@ -182,4 +179,4 @@ export const updateUserImage = async (req, res)=>{
         console.log(error.message);
         res.json({success: false, message: error.message})
     }
-}   
+}

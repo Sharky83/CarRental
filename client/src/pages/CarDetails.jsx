@@ -5,6 +5,7 @@ import Loader from '../components/Loader'
 import { useAppContext } from '../context/AppContext'
 import toast from 'react-hot-toast'
 import { motion } from 'motion/react'
+import { DisabledDatesPicker } from '../components/DisabledDatesPicker'
 
 const CarDetails = () => {
 
@@ -132,17 +133,22 @@ const CarDetails = () => {
 
             <hr className='border-borderColor my-6'/>
 
-            <div className='flex flex-col gap-2'>
-              <label htmlFor="pickup-date">Pickup Date</label>
-              <input value={pickupDate} onChange={(e)=>setPickupDate(e.target.value)}
-              type="date" className='border border-borderColor px-3 py-2 rounded-lg' required id='pickup-date' min={new Date().toISOString().split('T')[0]}/>
-            </div>
-
-            <div className='flex flex-col gap-2'>
-              <label htmlFor="return-date">Return Date</label>
-              <input value={returnDate} onChange={(e)=>setReturnDate(e.target.value)}
-              type="date" className='border border-borderColor px-3 py-2 rounded-lg' required id='return-date'/>
-            </div>
+            <DisabledDatesPicker
+              value={pickupDate}
+              onChange={setPickupDate}
+              carId={car._id}
+              axios={axios}
+              label="Pickup Date"
+              minDate={new Date()}
+            />
+            <DisabledDatesPicker
+              value={returnDate}
+              onChange={setReturnDate}
+              carId={car._id}
+              axios={axios}
+              label="Return Date"
+              minDate={pickupDate ? new Date(pickupDate) : new Date()}
+            />
 
             <button className='w-full bg-primary hover:bg-primary-dull transition-all py-3 font-medium text-white rounded-xl cursor-pointer'>Book Now</button>
 
