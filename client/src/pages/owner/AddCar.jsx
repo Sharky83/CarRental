@@ -62,13 +62,28 @@ const AddCar = () => {
     }
   }
 
-  // List of available features
+  // List of available features (UK car rental appropriate)
   const availableFeatures = [
-    '360 Camera',
+    'Sat Nav (GPS)',
+    'Air Conditioning',
+    'Parking Sensors',
+    'Cruise Control',
     'Bluetooth',
-    'GPS',
+    'Apple CarPlay/Android Auto',
+    'Child Seat',
     'Heated Seats',
-    'Rear View Mirror',
+    'Rear View Camera',
+    '360 Camera',
+    'Leather Seats',
+    'Sunroof',
+    'Keyless Entry',
+    'Alloy Wheels',
+    'Roof Rack',
+    'Pet Friendly',
+    'Smoking Allowed',
+    'Unlimited Mileage',
+    'Breakdown Cover',
+    'Dash Cam',
   ];
 
   return (
