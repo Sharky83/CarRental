@@ -22,6 +22,7 @@ export default defineConfig({
     },
   },
   build: {
+    target: 'es2025', // Explicitly target ES2025
     outDir: 'dist',
     sourcemap: false,
     rollupOptions: {
