@@ -7,31 +7,11 @@ import {motion} from 'motion/react'
 
 const Navbar = () => {
 
-    const {setShowLogin, user, logout, isOwner, axios, setIsOwner, setUser} = useAppContext()
+    const {showLoginModal, user, logout, isOwner, changeRole} = useAppContext()
 
     const location = useLocation()
     const [open, setOpen] = useState(false)
     const navigate = useNavigate()
-
-    const changeRole = async ()=>{
-        try {
-            const response = await axios.post('/api/owner/change-role')
-            const data = response.data;
-            if (data.success) {
-                setIsOwner(true)
-                // Update user object with new role
-                setUser(prevUser => ({ ...prevUser, role: 'owner' }))
-                toast.success(data.message)
-                // Redirect to owner dashboard after role change
-                navigate('/owner')
-            }else{
-                toast.error(data.message)
-            }
-        } catch (error) {
-            console.error('Role change error:', error)
-            toast.error(error.response?.data?.message || error.message || 'Failed to change role')
-        }
-    }
 
   return (
     <motion.div 
@@ -60,7 +40,7 @@ const Navbar = () => {
 
                 <button onClick={()=> isOwner ? navigate('/owner') : changeRole()} className="cursor-pointer">{isOwner ? 'Dashboard' : 'List cars'}</button>
 
-                <button onClick={()=> {user ? logout() : setShowLogin(true)}} className="cursor-pointer px-8 py-2 bg-primary hover:bg-primary-dull transition-all text-white rounded-lg">{user ? 'Logout' : 'Login'}</button>
+                <button onClick={()=> {user ? logout() : showLoginModal()}} className="cursor-pointer px-8 py-2 bg-primary hover:bg-primary-dull transition-all text-white rounded-lg">{user ? 'Logout' : 'Login'}</button>
             </div>
         </div>
 

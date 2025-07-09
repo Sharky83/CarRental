@@ -4,7 +4,7 @@ import toast from 'react-hot-toast';
 
 const Login = () => {
 
-    const {setShowLogin, axios, setToken, navigate, setUserData} = useAppContext()
+    const {setShowLogin, navigate, login, register} = useAppContext()
 
     const [state, setState] = React.useState("login");
     const [name, setName] = React.useState("");
@@ -22,44 +22,25 @@ const Login = () => {
                 requestData.role = 'owner';
             }
             
-            const response = await axios.post(`/api/user/${state}`, requestData)
-            const data = response.data;
+            let result;
+            if (state === 'register') {
+                result = await register(requestData);
+            } else {
+                result = await login({ email, password });
+            }
 
-            if (data.success) {
-                // Extract token and user from the nested data structure
-                const { token, user } = data.data;
-                console.log('Login successful - Token:', token ? 'exists' : 'missing', 'User:', user ? user.role : 'missing');
-                
-                setToken(token)
-                localStorage.setItem('token', token)
-                
-                // Ensure user data exists before setting it
-                if (user) {
-                    setUserData(user)
-                } else {
-                    console.error('No user data in response:', data);
-                    toast.error('Login successful but user data missing');
-                    return;
-                }
-                
-                setShowLogin(false)
-                
-                // Show success message
-                toast.success(state === 'register' ? 'Account created successfully!' : 'Login successful!')
-                
+            if (result.success) {
                 // Redirect based on user role
-                if (user && user.role === 'owner') {
+                if (result.user && result.user.role === 'owner') {
                     navigate('/owner');
                 } else {
                     navigate('/');
                 }
-            }else{
-                toast.error(data.message)
             }
 
         } catch (error) {
-            console.error('Login error:', error);
-            toast.error(error.response?.data?.message || error.message || 'Login failed')
+            // Error handling is done in the login/register functions
+            console.error('Login/Register error:', error);
         }
         
     }
