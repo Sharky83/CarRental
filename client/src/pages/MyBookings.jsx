@@ -64,11 +64,15 @@ const MyBookings = () => {
 
               <div className='md:col-span-1'>
                 <div className='rounded-md overflow-hidden mb-3'>
-                  <img src={booking.car.image} alt="" className='w-full h-auto aspect-video object-cover'/>
+                  {booking.car ? (
+                    <img src={booking.car.image} alt="" className='w-full h-auto aspect-video object-cover'/>
+                  ) : (
+                    <span className='text-gray-400 italic'>Car deleted</span>
+                  )}
                 </div>
-                <p className='text-lg font-medium mt-2'>{booking.car.brand} {booking.car.model}</p>
+                <p className='text-lg font-medium mt-2'>{booking.car ? `${booking.car.brand} ${booking.car.model}` : 'Car deleted'}</p>
 
-                <p className='text-gray-500'>{booking.car.year} • {booking.car.category} • {booking.car.location}</p>
+                <p className='text-gray-500'>{booking.car ? `${booking.car.year} • ${booking.car.category} • ${booking.car.location}` : ''}</p>
               </div>
 
               {/* Booking Info */}

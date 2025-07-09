@@ -72,8 +72,14 @@ const ManageBookings = () => {
                   <tr key={index} className='border-t border-borderColor text-gray-500'>
 
                     <td className='p-3 flex items-center gap-3'>
-                      <img src={booking.car.image} alt="" className='h-12 w-12 aspect-square rounded-md object-cover'/>
-                      <p className='font-medium max-md:hidden'>{booking.car.brand} {booking.car.model}</p>
+                      {booking.car ? (
+                        <>
+                          <img src={booking.car.image} alt="" className='h-12 w-12 aspect-square rounded-md object-cover'/>
+                          <p className='font-medium max-md:hidden'>{booking.car.brand} {booking.car.model}</p>
+                        </>
+                      ) : (
+                        <span className='text-gray-400 italic'>Car deleted</span>
+                      )}
                     </td>
 
                     <td className='p-3 max-md:hidden'>
