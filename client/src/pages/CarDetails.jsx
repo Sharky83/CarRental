@@ -37,7 +37,9 @@ const CarDetails = () => {
   }
 
   useEffect(()=>{
-    setCar(cars.find(car => car._id === id))
+    if (cars && cars.length > 0) {
+      setCar(cars.find(car => car._id === id))
+    }
   },[cars, id])
 
   return car ? (

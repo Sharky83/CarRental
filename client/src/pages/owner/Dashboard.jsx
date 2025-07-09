@@ -67,25 +67,31 @@ const Dashboard = () => {
         <div className='p-4 md:p-6 border border-borderColor rounded-md max-w-lg w-full'>
           <h1 className='text-lg font-medium'>Recent Bookings</h1>
           <p className='text-gray-500'>Latest customer bookings</p>
-          {data.recentBookings.map((booking, index)=>(
-            <div key={index} className='mt-4 flex items-center justify-between'>
+          {data.recentBookings && data.recentBookings.length > 0 ? (
+            data.recentBookings.map((booking, index)=>(
+              <div key={index} className='mt-4 flex items-center justify-between'>
 
-              <div className='flex items-center gap-2'>
-                <div className='hidden md:flex items-center justify-center w-12 h-12 rounded-full bg-primary/10'>
-                  <img src={assets.listIconColored} alt="" className='h-5 w-5'/>
+                <div className='flex items-center gap-2'>
+                  <div className='hidden md:flex items-center justify-center w-12 h-12 rounded-full bg-primary/10'>
+                    <img src={assets.listIconColored} alt="" className='h-5 w-5'/>
+                  </div>
+                  <div>
+                    <p>{booking.car.brand} {booking.car.model}</p>
+                    <p className='text-sm text-gray-500'>{booking.createdAt.split('T')[0]}</p>
+                  </div>
                 </div>
-                <div>
-                  <p>{booking.car.brand} {booking.car.model}</p>
-                  <p className='text-sm text-gray-500'>{booking.createdAt.split('T')[0]}</p>
+
+                <div className='flex items-center gap-2 font-medium'>
+                  <p className='text-sm text-gray-500'>{currency}{booking.price}</p>
+                  <p className='px-3 py-0.5 border border-borderColor rounded-full text-sm'>{booking.status}</p>
                 </div>
               </div>
-
-              <div className='flex items-center gap-2 font-medium'>
-                <p className='text-sm text-gray-500'>{currency}{booking.price}</p>
-                <p className='px-3 py-0.5 border border-borderColor rounded-full text-sm'>{booking.status}</p>
-              </div>
+            ))
+          ) : (
+            <div className='mt-4 text-center text-gray-500'>
+              <p>No recent bookings</p>
             </div>
-          ))}
+          )}
         </div>
 
         {/* monthly revenue */}

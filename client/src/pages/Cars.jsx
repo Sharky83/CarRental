@@ -21,6 +21,7 @@ const Cars = () => {
 
   const isSearchData = pickupLocation && pickupDate && returnDate
   const [filteredCars, setFilteredCars] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
 
   const applyFilter = async ()=>{
      
@@ -39,13 +40,20 @@ const Cars = () => {
   }
 
   const searchCarAvailablity = async () =>{
-    const {data} = await axios.post('/api/bookings/check-availability', {location: pickupLocation, pickupDate, returnDate})
-    if (data.success) {
-      setFilteredCars(data.availableCars)
-      if(data.availableCars.length === 0){
-        toast('No cars available')
+    try {
+      setIsLoading(true)
+      const {data} = await axios.post('/api/bookings/check-availability', {location: pickupLocation, pickupDate, returnDate})
+      if (data.success) {
+        setFilteredCars(data.availableCars || [])
+        if((data.availableCars || []).length === 0){
+          toast('No cars available')
+        }
       }
-      return null
+    } catch (error) {
+      console.error('Error checking car availability:', error)
+      toast.error('Error checking car availability')
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -53,8 +61,15 @@ const Cars = () => {
     isSearchData && searchCarAvailablity()
   },[])
 
+  // Initialize filteredCars when cars data is loaded
+  useEffect(() => {
+    if (cars && cars.length > 0 && !isSearchData && filteredCars.length === 0) {
+      setFilteredCars(cars)
+    }
+  }, [cars, isSearchData])
+
   useEffect(()=>{
-    cars.length > 0 && !isSearchData && applyFilter()
+    cars && cars.length > 0 && !isSearchData && applyFilter()
   },[input, cars])
 
   return (
@@ -88,19 +103,35 @@ const Cars = () => {
         transition={{ delay: 0.6, duration: 0.5 }}
 
       className='px-6 md:px-16 lg:px-24 xl:px-32 mt-10'>
-        <p className='text-gray-500 xl:px-20 max-w-7xl mx-auto'>Showing {filteredCars.length} Cars</p>
+        <p className='text-gray-500 xl:px-20 max-w-7xl mx-auto'>
+          {isLoading ? 'Loading cars...' : `Showing ${filteredCars?.length || 0} Cars`}
+        </p>
 
-        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-4 xl:px-20 max-w-7xl mx-auto'>
-          {filteredCars.map((car, index)=> (
-            <motion.div key={index}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 * index, duration: 0.4 }}
-            >
-              <CarCard car={car}/>
-            </motion.div>
-          ))}
-        </div>
+        {isLoading ? (
+          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-4 xl:px-20 max-w-7xl mx-auto'>
+            {[...Array(6)].map((_, index) => (
+              <div key={index} className='bg-gray-100 rounded-lg h-64 animate-pulse'></div>
+            ))}
+          </div>
+        ) : filteredCars && filteredCars.length > 0 ? (
+          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-4 xl:px-20 max-w-7xl mx-auto'>
+            {filteredCars.map((car, index)=> (
+              <motion.div key={index}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 * index, duration: 0.4 }}
+              >
+                <CarCard car={car}/>
+              </motion.div>
+            ))}
+          </div>
+        ) : (
+          <div className='text-center py-16 xl:px-20 max-w-7xl mx-auto'>
+            <p className='text-gray-500 text-lg'>
+              {input ? `No cars found matching "${input}"` : 'No cars available at the moment'}
+            </p>
+          </div>
+        )}
       </motion.div>
 
     </div>
