@@ -140,7 +140,5 @@ process.on('SIGTERM', gracefulShutdown);
 process.on('SIGINT', gracefulShutdown);
 
 // Start server
-const PORT = config.port;
-const server = app.listen(PORT, () => {
-    // Server started without logging startup messages
-});
+const port = process.env.PORT || 4002;
+app.listen(port, '0.0.0.0', () => console.log(`Server started on PORT:${port}`));
