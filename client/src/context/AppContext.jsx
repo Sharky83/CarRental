@@ -21,17 +21,29 @@ export const AppProvider = ({ children })=>{
 
     const [cars, setCars] = useState([])
 
+    // Function to set user data directly (used after login/register)
+    const setUserData = (userData) => {
+        setUser(userData)
+        setIsOwner(userData.role === 'owner')
+    }
+
     // Function to check if user is logged in
-    const fetchUser = async ()=>{
+    const fetchUser = async (shouldRedirect = false)=>{
         try {
            const {data} = await axios.get('/api/user/data')
            if (data.success) {
             setUser(data.user)
             setIsOwner(data.user.role === 'owner')
+            
+            // Redirect to appropriate dashboard if requested
+            if (shouldRedirect && data.user.role === 'owner') {
+                navigate('/owner')
+            }
            }else{
             navigate('/')
            }
         } catch (error) {
+            console.error('Error fetching user data:', error)
             toast.error(error.message)
         }
     }
@@ -73,7 +85,7 @@ export const AppProvider = ({ children })=>{
     },[token])
 
     const value = {
-        navigate, currency, axios, user, setUser,
+        navigate, currency, axios, user, setUser, setUserData,
         token, setToken, isOwner, setIsOwner, fetchUser, showLogin, setShowLogin, logout, fetchCars, cars, setCars, 
         pickupDate, setPickupDate, returnDate, setReturnDate
     }

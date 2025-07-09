@@ -7,7 +7,7 @@ import {motion} from 'motion/react'
 
 const Navbar = () => {
 
-    const {setShowLogin, user, logout, isOwner, axios, setIsOwner} = useAppContext()
+    const {setShowLogin, user, logout, isOwner, axios, setIsOwner, setUser} = useAppContext()
 
     const location = useLocation()
     const [open, setOpen] = useState(false)
@@ -18,12 +18,17 @@ const Navbar = () => {
             const { data } = await axios.post('/api/owner/change-role')
             if (data.success) {
                 setIsOwner(true)
+                // Update user object with new role
+                setUser(prevUser => ({ ...prevUser, role: 'owner' }))
                 toast.success(data.message)
+                // Redirect to owner dashboard after role change
+                navigate('/owner')
             }else{
                 toast.error(data.message)
             }
         } catch (error) {
-            toast.error(error.message)
+            console.error('Role change error:', error)
+            toast.error(error.response?.data?.message || error.message || 'Failed to change role')
         }
     }
 

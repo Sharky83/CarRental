@@ -4,29 +4,51 @@ import toast from 'react-hot-toast';
 
 const Login = () => {
 
-    const {setShowLogin, axios, setToken, navigate} = useAppContext()
+    const {setShowLogin, axios, setToken, navigate, setUserData} = useAppContext()
 
     const [state, setState] = React.useState("login");
     const [name, setName] = React.useState("");
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
+    const [registerAsOwner, setRegisterAsOwner] = React.useState(false);
 
     const onSubmitHandler = async (event)=>{
         try {
             event.preventDefault();
-            const {data} = await axios.post(`/api/user/${state}`, {name, email, password})
+            const requestData = { name, email, password };
+            
+            // Add role if registering as owner
+            if (state === 'register' && registerAsOwner) {
+                requestData.role = 'owner';
+            }
+            
+            const {data} = await axios.post(`/api/user/${state}`, requestData)
 
             if (data.success) {
-                navigate('/')
                 setToken(data.token)
                 localStorage.setItem('token', data.token)
+                
+                // Set user data immediately to avoid race conditions
+                setUserData(data.user)
+                
                 setShowLogin(false)
+                
+                // Show success message
+                toast.success(state === 'register' ? 'Account created successfully!' : 'Login successful!')
+                
+                // Redirect based on user role
+                if (data.user.role === 'owner') {
+                    navigate('/owner');
+                } else {
+                    navigate('/');
+                }
             }else{
                 toast.error(data.message)
             }
 
         } catch (error) {
-            toast.error(error.message)
+            console.error('Login error:', error);
+            toast.error(error.response?.data?.message || error.message || 'Login failed')
         }
         
     }
@@ -52,9 +74,23 @@ const Login = () => {
                 <p>Password</p>
                 <input onChange={(e) => setPassword(e.target.value)} value={password} placeholder="type here" className="border border-gray-200 rounded w-full p-2 mt-1 outline-primary" type="password" required />
             </div>
+            {state === "register" && (
+                <div className="w-full flex items-center gap-2">
+                    <input 
+                        type="checkbox" 
+                        id="registerAsOwner" 
+                        checked={registerAsOwner}
+                        onChange={(e) => setRegisterAsOwner(e.target.checked)}
+                        className="accent-primary" 
+                    />
+                    <label htmlFor="registerAsOwner" className="text-sm text-gray-700 cursor-pointer">
+                        Register as car owner
+                    </label>
+                </div>
+            )}
             {state === "register" ? (
                 <p>
-                    Already have account? <span onClick={() => setState("login")} className="text-primary cursor-pointer">click here</span>
+                    Already have account? <span onClick={() => {setState("login"); setRegisterAsOwner(false);}} className="text-primary cursor-pointer">click here</span>
                 </p>
             ) : (
                 <p>
