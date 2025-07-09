@@ -23,6 +23,10 @@ export const AppProvider = ({ children })=>{
 
     // Function to set user data directly (used after login/register)
     const setUserData = (userData) => {
+        if (!userData) {
+            console.error('setUserData called with undefined userData');
+            return;
+        }
         setUser(userData)
         setIsOwner(userData.role === 'owner')
     }
@@ -30,29 +34,47 @@ export const AppProvider = ({ children })=>{
     // Function to check if user is logged in
     const fetchUser = async (shouldRedirect = false)=>{
         try {
-           const {data} = await axios.get('/api/user/data')
+           const response = await axios.get('/api/user/data')
+           const data = response.data;
+           
            if (data.success) {
-            setUser(data.user)
-            setIsOwner(data.user.role === 'owner')
+            const user = data.data.user;
+            setUser(user)
+            setIsOwner(user.role === 'owner')
             
             // Redirect to appropriate dashboard if requested
-            if (shouldRedirect && data.user.role === 'owner') {
+            if (shouldRedirect && user.role === 'owner') {
                 navigate('/owner')
             }
            }else{
+            // Don't show error toast for failed authentication on page load
+            if (shouldRedirect) {
+                toast.error(data.message)
+            }
             navigate('/')
            }
         } catch (error) {
             console.error('Error fetching user data:', error)
-            toast.error(error.message)
+            // Only show error toast if it's not an authentication error on page load
+            if (error.response?.status !== 401 && shouldRedirect) {
+                toast.error(error.message)
+            }
+            // Clear invalid token
+            if (error.response?.status === 401) {
+                localStorage.removeItem('token')
+                setToken(null)
+                setUser(null)
+                setIsOwner(false)
+                axios.defaults.headers.common['Authorization'] = ''
+            }
         }
     }
     // Function to fetch all cars from the server
-
     const fetchCars = async () =>{
         try {
-            const {data} = await axios.get('/api/user/cars')
-            data.success ? setCars(data.cars) : toast.error(data.message)
+            const response = await axios.get('/api/user/cars')
+            const data = response.data;
+            data.success ? setCars(data.data.cars) : toast.error(data.message)
         } catch (error) {
             toast.error(error.message)
         }
@@ -71,8 +93,10 @@ export const AppProvider = ({ children })=>{
 
     // useEffect to retrieve the token from localStorage
     useEffect(()=>{
-        const token = localStorage.getItem('token')
-        setToken(token)
+        const storedToken = localStorage.getItem('token')
+        if (storedToken) {
+            setToken(storedToken)
+        }
         fetchCars()
     },[])
 
@@ -80,7 +104,10 @@ export const AppProvider = ({ children })=>{
     useEffect(()=>{
         if(token){
             axios.defaults.headers.common['Authorization'] = `${token}`
-            fetchUser()
+            fetchUser(false) // Don't redirect automatically on token load
+        } else {
+            // Clear auth header if no token
+            axios.defaults.headers.common['Authorization'] = ''
         }
     },[token])
 

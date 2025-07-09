@@ -15,7 +15,8 @@ const Navbar = () => {
 
     const changeRole = async ()=>{
         try {
-            const { data } = await axios.post('/api/owner/change-role')
+            const response = await axios.post('/api/owner/change-role')
+            const data = response.data;
             if (data.success) {
                 setIsOwner(true)
                 // Update user object with new role
