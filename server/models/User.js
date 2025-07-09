@@ -55,9 +55,10 @@ const userSchema = new mongoose.Schema({
 });
 
 // Indexes for better performance
-userSchema.index({ email: 1 });
+// Note: Email index is already created by `unique: true` in schema definition
 userSchema.index({ role: 1 });
 userSchema.index({ isActive: 1 });
+userSchema.index({ lastLogin: -1 }); // For sorting by recent logins
 
 // Instance methods
 userSchema.methods.toJSON = function() {
