@@ -40,15 +40,19 @@ class ErrorBoundary extends React.Component {
                 Refresh Page
               </button>
               
-              {process.env.NODE_ENV === 'development' && (
+              {process.env.NODE_ENV === 'development' && this.state.error && (
                 <details className="mt-4 text-left">
                   <summary className="cursor-pointer text-sm text-gray-500">
                     Show error details (Development)
                   </summary>
                   <pre className="mt-2 text-xs text-red-600 bg-red-50 p-2 rounded overflow-auto">
-                    {this.state.error && this.state.error.toString()}
-                    <br />
-                    {this.state.errorInfo.componentStack}
+                    {this.state.error.toString()}
+                    {this.state.errorInfo && (
+                      <>
+                        <br />
+                        {this.state.errorInfo.componentStack}
+                      </>
+                    )}
                   </pre>
                 </details>
               )}

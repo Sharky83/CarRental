@@ -78,7 +78,7 @@ const ManageCars = () => {
             </tr>
           </thead>
           <tbody>
-            {cars.map((car, index)=>(
+            {(cars || []).map((car, index)=>(
               <tr key={index} className='border-t border-borderColor'>
 
                 <td className='p-3 flex items-center gap-3'>

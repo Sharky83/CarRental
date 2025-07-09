@@ -25,11 +25,11 @@ const Cars = () => {
   const applyFilter = async ()=>{
      
     if(input === ''){
-      setFilteredCars(cars)
+      setFilteredCars(cars || [])
       return null
     }
 
-    const filtered = cars.slice().filter((car)=>{
+    const filtered = (cars || []).slice().filter((car)=>{
       return car.brand.toLowerCase().includes(input.toLowerCase())
       || car.model.toLowerCase().includes(input.toLowerCase())  
       || car.category.toLowerCase().includes(input.toLowerCase())  

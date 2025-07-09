@@ -11,6 +11,9 @@ const FeaturedSection = () => {
     const navigate = useNavigate()
     const {cars} = useAppContext()
 
+    // Loading state for cars
+    const isLoading = !cars || cars.length === 0;
+
   return (
     <motion.div 
     initial={{ opacity: 0, y: 40 }}
@@ -32,7 +35,7 @@ const FeaturedSection = () => {
         transition={{ delay: 0.5, duration: 1 }}
         className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-18'>
         {
-            cars.slice(0,6).map((car)=> (
+            cars && cars.length > 0 ? cars.slice(0,6).map((car)=> (
                 <motion.div key={car._id}
                 initial={{ opacity: 0, scale: 0.95 }}
                 whileInView={{ opacity: 1, scale: 1 }}
@@ -40,7 +43,16 @@ const FeaturedSection = () => {
                 >
                     <CarCard car={car}/>
                 </motion.div>
-            ))
+            )) : isLoading ? (
+                // Loading skeleton
+                Array.from({ length: 6 }).map((_, index) => (
+                    <div key={index} className="bg-gray-200 animate-pulse rounded-lg h-80"></div>
+                ))
+            ) : (
+                <div className="col-span-full text-center py-12">
+                    <p className="text-gray-500">No cars available at the moment.</p>
+                </div>
+            )
         }
         </motion.div>
 
