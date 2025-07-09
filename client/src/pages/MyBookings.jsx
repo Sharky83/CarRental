@@ -72,7 +72,7 @@ const MyBookings = () => {
                 </div>
                 <p className='text-lg font-medium mt-2'>{booking.car ? `${booking.car.brand} ${booking.car.model}` : 'Car deleted'}</p>
 
-                <p className='text-gray-500'>{booking.car ? `${booking.car.year} • ${booking.car.category} • ${booking.car.location}` : ''}</p>
+                <p className='text-gray-500'>{booking.car && booking.car.year ? `${booking.car.year} • ${booking.car.category} • ${booking.car.location}` : ''}</p>
               </div>
 
               {/* Booking Info */}
@@ -94,7 +94,7 @@ const MyBookings = () => {
                   <img src={assets.location_icon_colored} alt="" className='w-4 h-4 mt-1'/>
                   <div>
                     <p className='text-gray-500'>Pick-up Location</p>
-                    <p>{booking.car.location}</p>
+                    <p>{booking.car && booking.car.location ? booking.car.location : 'Car deleted'}</p>
                   </div>
                 </div>
               </div>
