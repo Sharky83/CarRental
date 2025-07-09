@@ -1,5 +1,5 @@
 /**
- * Environment configuration with validation
+ * Environment configuration with validation and improved DX
  */
 
 const requiredEnvVars = {
@@ -16,19 +16,30 @@ const validateEnv = () => {
     .map(([key]) => key);
 
   if (missingVars.length > 0) {
-    throw new Error(
-      `Missing required environment variables: ${missingVars.join(', ')}`
-    );
+    if (import.meta.env.PROD) {
+      throw new Error(
+        `Missing required environment variables: ${missingVars.join(', ')}`
+      );
+    } else {
+      // Warn in development for better DX
+      // eslint-disable-next-line no-console
+      console.warn(
+        `Warning: Missing required environment variables: ${missingVars.join(', ')}`
+      );
+    }
   }
 };
 
 // Validate on module load
 validateEnv();
 
+// Parse timeout safely
+const apiTimeout = Number.parseInt(requiredEnvVars.VITE_API_TIMEOUT, 10);
+
 export const config = {
   api: {
     baseURL: requiredEnvVars.VITE_BASE_URL,
-    timeout: parseInt(requiredEnvVars.VITE_API_TIMEOUT || '10000'),
+    timeout: Number.isNaN(apiTimeout) ? 10000 : apiTimeout,
   },
   app: {
     name: requiredEnvVars.VITE_APP_NAME || 'Car Rental',
@@ -39,3 +50,9 @@ export const config = {
     enableDevTools: import.meta.env.DEV,
   },
 };
+
+// Optionally export individual config values for convenience
+export const BASE_URL = config.api.baseURL;
+export const API_TIMEOUT = config.api.timeout;
+export const APP_NAME = config.app.name;
+export const CURRENCY = config.app.currency;

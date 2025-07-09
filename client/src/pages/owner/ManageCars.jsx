@@ -86,6 +86,13 @@ const ManageCars = () => {
                   <div className='max-md:hidden'>
                     <p className='font-medium'>{car.brand} {car.model}</p>
                     <p className='text-xs text-gray-500'>{car.seating_capacity} • {car.transmission}</p>
+                    {Array.isArray(car.features) && car.features.length > 0 && (
+                      <div className='flex flex-wrap gap-1 mt-1'>
+                        {car.features.map((feature) => (
+                          <span key={feature} className='bg-gray-100 text-gray-500 text-xs px-2 py-0.5 rounded-full'>{feature}</span>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </td>
 

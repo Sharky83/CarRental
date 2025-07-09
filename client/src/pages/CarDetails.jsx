@@ -103,16 +103,18 @@ const CarDetails = () => {
                 {/* Features */}
                 <div>
                   <h1 className='text-xl font-medium mb-3'>Features</h1>
-                  <ul className='grid grid-cols-1 sm:grid-cols-2 gap-2'>
-                    {
-                      ["360 Camera", "Bluetooth", "GPS", "Heated Seats", "Rear View Mirror"].map((item)=>(
+                  {Array.isArray(car.features) && car.features.length > 0 ? (
+                    <ul className='grid grid-cols-1 sm:grid-cols-2 gap-2'>
+                      {car.features.map((item) => (
                         <li key={item} className='flex items-center text-gray-500'>
-                          <img src={assets.check_icon} className='h-4 mr-2' alt="" />
+                          <img src={assets.check_icon} className='h-4 mr-2' alt='' />
                           {item}
                         </li>
-                      ))
-                    }
-                  </ul>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className='text-gray-400'>No features listed.</p>
+                  )}
                 </div>
 
               </motion.div>

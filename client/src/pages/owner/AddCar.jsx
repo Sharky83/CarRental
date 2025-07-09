@@ -20,6 +20,7 @@ const AddCar = () => {
     seating_capacity: 0,
     location: '',
     description: '',
+    features: [], // <-- add features to state
   })
 
   const [isLoading, setIsLoading] = useState(false)
@@ -49,6 +50,7 @@ const AddCar = () => {
           seating_capacity: 0,
           location: '',
           description: '',
+          features: [], // <-- reset features
         })
       }else{
         toast.error(data.message)
@@ -59,6 +61,15 @@ const AddCar = () => {
       setIsLoading(false)
     }
   }
+
+  // List of available features
+  const availableFeatures = [
+    '360 Camera',
+    'Bluetooth',
+    'GPS',
+    'Heated Seats',
+    'Rear View Mirror',
+  ];
 
   return (
     <div className='px-4 py-10 md:px-10 flex-1'>
@@ -154,6 +165,30 @@ const AddCar = () => {
             <label>Description</label>
             <textarea rows={5} placeholder="e.g. A luxurious SUV with a spacious interior and a powerful engine." required className='px-3 py-2 mt-1 border border-borderColor rounded-md outline-none' value={car.description} onChange={e=> setCar({...car, description: e.target.value})}></textarea>
           </div>
+
+        {/* Car Features */}
+        <div className='flex flex-col w-full'>
+          <label>Features</label>
+          <div className='flex flex-wrap gap-4 mt-2'>
+            {availableFeatures.map((feature) => (
+              <label key={feature} className='flex items-center gap-2 cursor-pointer'>
+                <input
+                  type="checkbox"
+                  checked={car.features.includes(feature)}
+                  onChange={e => {
+                    if (e.target.checked) {
+                      setCar({ ...car, features: [...car.features, feature] });
+                    } else {
+                      setCar({ ...car, features: car.features.filter(f => f !== feature) });
+                    }
+                  }}
+                  className='accent-primary'
+                />
+                <span>{feature}</span>
+              </label>
+            ))}
+          </div>
+        </div>
 
         <button className='flex items-center gap-2 px-4 py-2.5 mt-4 bg-primary text-white rounded-md font-medium w-max cursor-pointer'>
           <img src={assets.tick_icon} alt="" />
