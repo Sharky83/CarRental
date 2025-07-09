@@ -271,7 +271,7 @@ export const AppProvider = ({ children }) => {
   // Computed values
   const isAuthenticated = Boolean(state.token && state.user);
   const isOwner = state.user?.role === 'owner';
-  const currency = 'USD'; // You can make this configurable
+  const currency = import.meta.env.VITE_CURRENCY || 'GBP'; // Use environment variable
 
   const value = {
     // State

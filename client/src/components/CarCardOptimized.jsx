@@ -10,7 +10,7 @@ const CarCard = memo(({
   car, 
   onBook, 
   onViewDetails, 
-  currency = 'USD',
+  currency = 'GBP',
   className = '',
   variant = 'default' 
 }) => {

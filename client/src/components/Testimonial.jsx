@@ -7,17 +7,17 @@ const Testimonial = () => {
 
     const testimonials = [
         { name: "Emma Rodriguez", 
-          location: "Barcelona, Spain", 
+          location: "London, UK", 
           image: assets.testimonial_image_1, 
           testimonial: "I've rented cars from various companies, but the experience with CarRental was exceptional." 
         },
         { name: "John Smith", 
-          location: "New York, USA", 
+          location: "Manchester, UK", 
           image: assets.testimonial_image_2, 
           testimonial: "CarRental made my trip so much easier. The car was delivered right to my door, and the customer service was fantastic!" 
         },
         { name: "Ava Johnson", 
-          location: "Sydney, Australia", 
+          location: "Birmingham, UK", 
           image: assets.testimonial_image_1, 
           testimonial: "I highly recommend CarRental! Their fleet is amazing, and I always feel like I'm getting the best deal with excellent service." 
         }
@@ -26,7 +26,7 @@ const Testimonial = () => {
   return (
     <div className="py-28 px-6 md:px-16 lg:px-24 xl:px-44">
             
-           <Title title="What Our Customers Say" subTitle="Discover why discerning travelers choose StayVenture for their luxury accommodations around the world."/>
+           <Title title="What Our Customers Say" subTitle="Discover why discerning travelers choose our premium car rental service for their journeys across the UK."/>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-18">
                 {testimonials.map((testimonial, index) => (

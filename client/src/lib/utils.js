@@ -7,8 +7,8 @@ export function cn(...inputs) {
 }
 
 // Format currency
-export const formatCurrency = (amount, currency = 'USD') => {
-  return new Intl.NumberFormat('en-US', {
+export const formatCurrency = (amount, currency = 'GBP') => {
+  return new Intl.NumberFormat('en-GB', {
     style: 'currency',
     currency: currency,
   }).format(amount);
@@ -16,7 +16,7 @@ export const formatCurrency = (amount, currency = 'USD') => {
 
 // Format date
 export const formatDate = (date) => {
-  return new Intl.DateTimeFormat('en-US', {
+  return new Intl.DateTimeFormat('en-GB', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
