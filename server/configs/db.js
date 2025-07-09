@@ -9,9 +9,9 @@ const connectDB = async () => {
             socketTimeoutMS: 45000 // Close sockets after 45 seconds of inactivity
         };
 
-        mongoose.connection.on('connected', () => console.log("✅ Database Connected"));
-        mongoose.connection.on('error', (err) => console.log("❌ Database Error:", err));
-        mongoose.connection.on('disconnected', () => console.log("⚠️ Database Disconnected"));
+        mongoose.connection.on('connected', () => console.log("Database Connected"));
+        mongoose.connection.on('error', (err) => console.log("Database Error:", err));
+        mongoose.connection.on('disconnected', () => console.log("Database Disconnected"));
 
         await mongoose.connect(`${process.env.MONGODB_URI}/car-rental`, options);
         
