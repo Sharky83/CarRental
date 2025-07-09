@@ -22,7 +22,7 @@ export default defineConfig({
     },
   },
   build: {
-    target: 'es2025', // Explicitly target ES2025
+    target: 'es2022', // Explicitly target ES2022 (supported by Vite/esbuild)
     outDir: 'dist',
     sourcemap: false,
     rollupOptions: {
