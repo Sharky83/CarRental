@@ -11,6 +11,7 @@ import userRouter from "./routes/userRoutes.js";
 import ownerRouter from "./routes/ownerRoutes.js";
 import bookingRouter from "./routes/bookingRoutes.js";
 import publicBookingRouter from "./routes/publicBookingRoutes.js";
+import ownerBookingRouter from "./routes/ownerBookingRoutes.js";
 import { errorHandler, notFound } from "./middleware/errorHandler.js";
 
 // Initialize Express App
@@ -114,6 +115,7 @@ app.use('/api/user', userRouter);
 app.use('/api/owner', ownerRouter);
 app.use('/api/bookings', bookingRouter);
 app.use('/api/public-bookings', publicBookingRouter);
+app.use('/api/owner-bookings', ownerBookingRouter);
 
 // Error handling middleware (must be last)
 app.use(notFound);

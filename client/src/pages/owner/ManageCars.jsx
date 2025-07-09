@@ -39,10 +39,15 @@ const ManageCars = () => {
 
   const deleteCar = async (carId)=>{
     try {
-
-      const confirm = window.confirm('Are you sure you want to delete this car?')
-
-      if(!confirm) return null
+      // Check for bookings before confirming delete
+      const { data: bookingsData } = await axios.get(`/api/owner-bookings/car/${carId}`);
+      if (bookingsData.success && bookingsData.bookings.length > 0) {
+        const confirm = window.confirm(`This car has ${bookingsData.bookings.length} active booking(s). Deleting it will remove it from all future bookings. Are you sure you want to continue?`);
+        if (!confirm) return null;
+      } else {
+        const confirm = window.confirm('Are you sure you want to delete this car?')
+        if(!confirm) return null
+      }
 
       const {data} = await axios.post('/api/owner/delete-car', {carId})
       if(data.success){
