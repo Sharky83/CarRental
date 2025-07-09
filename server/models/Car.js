@@ -14,8 +14,8 @@ const carSchema = new mongoose.Schema({
     pricePerDay: { type: Number, required: true, min: 0 },
     location: { type: String, required: true, trim: true },
     description: { type: String, required: true, trim: true, minlength: 10, maxlength: 500 },
-    isAvailable: {type: Boolean, default: true}, // Fixed typo: isAvaliable -> isAvailable
-    features: [{type: String}], // Array of car features
+    isAvailable: {type: Boolean, default: true}, 
+    features: [{type: String}], 
     rating: {type: Number, default: 0, min: 0, max: 5},
     totalBookings: {type: Number, default: 0}
 },{timestamps: true})
